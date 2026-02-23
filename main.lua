@@ -13,6 +13,11 @@ rs.conf({game_width = 192, game_height = 108, pixel_perfect = true})
 rs.setMode(960, 540, {fullscreen = false})
 
 
+if arg and arg[2] == "debug" then
+    require("lldebugger").start()
+end
+
+
 function love.resize(w, h)
     rs.resize(w, h)
 end
@@ -52,3 +57,14 @@ function love.draw()
     RENDER_MANAGER:draw()
     rs.pop()
 end
+
+
+local love_errorhandler = love.errorhandler
+function love.errorhandler(msg)
+    if lldebugger then
+        error(msg, 2)
+    else
+        return love_errorhandler(msg)
+    end
+end
+
