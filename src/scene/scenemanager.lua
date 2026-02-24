@@ -5,10 +5,11 @@ local GameScene = require("src.scene.gamescene")
 local SceneManager = Class{}
 
 
-function SceneManager:init(GAME_STATE)
-    self.game_scene = GameScene(GAME_STATE)
+function SceneManager:init(GAME_STATE, RENDER_MANAGER)
+    self.game_scene = GameScene(GAME_STATE, RENDER_MANAGER)
 
-    self.current_scene = self.game_scene
+    self.current_scene = nil
+    self:switch(self.game_scene)
 end
 
 
