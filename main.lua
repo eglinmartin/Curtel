@@ -39,14 +39,17 @@ function love.resize(w, h)
 end
 
 
+function love.keypressed(key)
+    INPUT_MANAGER:keypressed(key)
+end
+
+
 function love.update(dt)
     -- Update game loop
     GAME_CONTEXT:update(dt)
     GAME_STATE:update(dt)
     
     -- Update managers
-    EVENT_MANAGER:update(dt)
-    INPUT_MANAGER:update(dt)
     RENDER_MANAGER:update(dt)
     SCENE_MANAGER:update(dt)
 end

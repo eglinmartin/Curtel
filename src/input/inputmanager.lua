@@ -1,14 +1,17 @@
 local Class = require("lib.class")
-local rs = require("lib.resolution_solution")
 
 local InputManager = Class{}
 
 
-function InputManager:init()
+function InputManager:init(EVENT_MANAGER)
+    self.event_manager = EVENT_MANAGER
 end
 
 
-function InputManager:update(dt)
+function InputManager:keypressed(key)
+    if key == "f5" then
+        self.event_manager:trigger(self.event_manager.events.NODPLAYER)
+    end
 end
 
 

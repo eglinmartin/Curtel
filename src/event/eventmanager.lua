@@ -1,14 +1,32 @@
 local Class = require("lib.class")
-local rs = require("lib.resolution_solution")
 
 local EventManager = Class{}
 
 
+local Events = {
+    NODPLAYER = 1
+}
+
+
 function EventManager:init()
+    self.events = Events
+    self.listeners = {} -- table storing callbacks for each event
 end
 
 
-function EventManager:update(dt)
+function EventManager:on(event_id, callback)
+    self.listeners[event_id] = self.listeners[event_id] or {}
+    table.insert(self.listeners[event_id], callback)
+end
+
+
+function EventManager:trigger(event_id)
+    local callbacks = self.listeners[event_id]
+    if callbacks then
+        for _, callback in ipairs(callbacks) do
+            callback()
+        end
+    end
 end
 
 
