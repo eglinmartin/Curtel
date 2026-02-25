@@ -15,6 +15,9 @@ function InputManager:keypressed(key)
     if key == "f2" then
         self.event_manager:trigger(self.event_manager.events.SWITCHSCREEN_SHOP)
     end
+    if key == "f3" then
+        self.event_manager:trigger(self.event_manager.events.DEALCARDS)
+    end
     if key == "f5" then
         self.event_manager:trigger(self.event_manager.events.NODPLAYER)
     end

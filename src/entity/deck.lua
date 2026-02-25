@@ -74,10 +74,11 @@ Cards = {
 }
 
 
-function Deck:init(controller)
+function Deck:init(owner)
     -- Create pack of cards
-    self.controller = controller
+    self.owner = owner
 
+    self.owner = owner
     self.deck = {}
     self:reset()
 end
@@ -88,7 +89,14 @@ function Deck:reset()
     for _, card in pairs(Cards) do
         table.insert(self.deck, card)
     end
-    self:shuffle()
+end
+
+
+function Deck:deal_cards()
+    for _, card in pairs(Cards) do
+        table.insert(self.deck, card)
+    end
+    self.owner.hand = {self.deck[1], self.deck[2], self.deck[5]}
 end
 
 

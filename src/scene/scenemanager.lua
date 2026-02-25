@@ -22,12 +22,16 @@ end
 
 
 function SceneManager:setup_events()
-    self.event_manager:on(self.event_manager.events.SWITCHSCREEN_GAME, function()
-        self:switch_scene(self.game_scene)
-    end)
-    self.event_manager:on(self.event_manager.events.SWITCHSCREEN_SHOP, function()
-        self:switch_scene(self.shop_scene)
-    end)
+    self.event_manager:on(
+        self.event_manager.events.SWITCHSCREEN_GAME, self, function()
+            self:switch_scene(self.game_scene)
+        end
+    )
+    self.event_manager:on(
+        self.event_manager.events.SWITCHSCREEN_SHOP, self, function()
+            self:switch_scene(self.shop_scene)
+        end
+    )
 end
 
 
