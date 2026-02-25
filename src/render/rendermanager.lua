@@ -60,11 +60,16 @@ end
 
 
 function RenderManager:create_draw_object_background(sprite_id, sprite_name, sprite_tag, x, y, scale, rot)
-    table.insert(
-        self.draw_objects_background,
-        DrawObject(sprite_id, peachy.new("bin/json/" ..sprite_name.. ".json", love.graphics.newImage("bin/backgrounds/" ..sprite_name.. ".png"), sprite_tag),
-        x, y, rot, scale)
-    )
+    self.draw_objects_background[sprite_id] =
+        DrawObject(
+            sprite_id,
+            peachy.new(
+                "bin/json/" .. sprite_name .. ".json",
+                love.graphics.newImage("bin/backgrounds/" .. sprite_name .. ".png"),
+                sprite_tag
+            ),
+            x, y, rot, scale
+        )
 end
 
 
@@ -128,7 +133,7 @@ function RenderManager:set_shadow_colour(colour)
     if colour == 'green' then
         self.shadow_colour = {75/255, 90/255, 87/255, 1}
     elseif colour == 'red' then
-        self.shadow_colour = {81/255, 62/255, 69/255, 1}
+        self.shadow_colour = {105/255, 67/255, 67/255, 1}
     end
 end
 

@@ -21,14 +21,15 @@ end
 
 function ShopScene:enter()
     self:update_sprites()
-    self.render_manager:set_shadow_colour("red")
+    self.render_manager:set_shadow_colour("green")
+    self.render_manager.draw_objects_background["background"].dscale = 0.1
     self.render_manager.draw_objects_foreground["barrel_base"].dy = 4
 end
 
 
 function ShopScene:update_sprites()
     self.render_manager:clear_sprites()
-    self.render_manager:create_draw_object_background("background", "background_red", "game", 96, 54, 0, 1)
+    self.render_manager:create_draw_object_background("background", "background_green", "game", 96, 54, 0, 1)
     self.render_manager:create_draw_object_foreground("barrel_base", "barrel", "base", 138, 54, 0, 1)
 end
 

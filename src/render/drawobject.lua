@@ -24,21 +24,33 @@ end
 function DrawObject:update(dt)
     self.sprite:update(dt)
 
-    self.dx = self:return_to_xy(self.dx, dt, 0)
-    self.dy = self:return_to_xy(self.dy, dt, 0)
-    self.dscale = self:return_to_xy(self.dscale, dt, 0)
+    self.dx = self:return_to_xy(self.dx, dt)
+    self.dy = self:return_to_xy(self.dy, dt)
+    self.dscale = self:return_to_scale(dt)
 end
 
 
-function DrawObject:return_to_xy(d, dt, default)
+function DrawObject:return_to_xy(d, dt)
     local decay = 16
     d = d * math.exp(-decay * dt)
 
     if math.abs(d) < 0.1 then
-        return default
+        return 0
     end
 
     return d
+end
+
+
+function DrawObject:return_to_scale(dt)
+    local decay = 16
+    self.dscale = self.dscale * math.exp(-decay * dt)
+
+    if math.abs(self.dscale) < 0.001 then
+        return 0
+    end
+
+    return self.dscale
 end
 
 
