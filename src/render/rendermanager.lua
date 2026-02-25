@@ -18,12 +18,16 @@ local shadowShader = love.graphics.newShader([[
 ]])
 
 
-
 function RenderManager:init(SCENE_MANAGER)
     self.scene_manager = SCENE_MANAGER
 
-    self.canvas_foreground = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight())
+    self.shadow_colour = {75/255, 90/255, 87/255, 1}
+    self.draw_objects_background = {}
+    self.draw_objects_foreground = {}
+end
 
+
+function RenderManager:clear_sprites()
     self.draw_objects_background = {}
     self.draw_objects_foreground = {}
 end
@@ -55,19 +59,19 @@ function RenderManager:draw(rs)
 end
 
 
-function RenderManager:create_draw_object_background(sprite_name, sprite_tag, x, y, scale, rot)
+function RenderManager:create_draw_object_background(sprite_id, sprite_name, sprite_tag, x, y, scale, rot)
     table.insert(
         self.draw_objects_background,
-        DrawObject(sprite_name, peachy.new("bin/json/" ..sprite_name.. ".json", love.graphics.newImage("bin/backgrounds/" ..sprite_name.. ".png"), sprite_tag),
+        DrawObject(sprite_id, peachy.new("bin/json/" ..sprite_name.. ".json", love.graphics.newImage("bin/backgrounds/" ..sprite_name.. ".png"), sprite_tag),
         x, y, rot, scale)
     )
 end
 
 
-function RenderManager:create_draw_object_foreground(sprite_name, sprite_tag, x, y, scale, rot)
-    self.draw_objects_foreground[sprite_name] =
+function RenderManager:create_draw_object_foreground(sprite_id, sprite_name, sprite_tag, x, y, scale, rot)
+    self.draw_objects_foreground[sprite_id] =
         DrawObject(
-            sprite_name,
+            sprite_id,
             peachy.new(
                 "bin/json/" .. sprite_name .. ".json",
                 love.graphics.newImage("bin/sprites/" .. sprite_name .. ".png"),
@@ -120,8 +124,17 @@ function RenderManager:draw_foreground()
 end
 
 
+function RenderManager:set_shadow_colour(colour)
+    if colour == 'green' then
+        self.shadow_colour = {75/255, 90/255, 87/255, 1}
+    elseif colour == 'red' then
+        self.shadow_colour = {81/255, 62/255, 69/255, 1}
+    end
+end
+
+
 function RenderManager:draw_shadow(anim, x, y, rot, scale, ox, oy)
-    local outlineColor = {75/255, 90/255, 87/255, 1}
+    local outlineColor = self.shadow_colour
 
     love.graphics.setShader(shadowShader)
     love.graphics.setColor(outlineColor)

@@ -4,7 +4,8 @@ local EventManager = Class{}
 
 
 local Events = {
-    NODPLAYER = 1
+    SWITCHSCREEN_GAME = 'switch screen to game',
+    SWITCHSCREEN_SHOP = 'switch screen to shop'
 }
 
 
