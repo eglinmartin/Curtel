@@ -55,11 +55,14 @@ function RenderManager:draw(rs)
     -- Draw current scene to foreground canvas
     self:draw_foreground()
 
+    local font = love.graphics.newFont(24)
+    love.graphics.setFont(font)
+
     rs.pop()
 end
 
 
-function RenderManager:create_draw_object_background(sprite_id, sprite_name, sprite_tag, x, y, scale, rot)
+function RenderManager:create_draw_object_background(sprite_id, sprite_name, sprite_tag, x, y, scale, rot, depth)
     self.draw_objects_background[sprite_id] =
         DrawObject(
             sprite_id,
@@ -68,12 +71,12 @@ function RenderManager:create_draw_object_background(sprite_id, sprite_name, spr
                 love.graphics.newImage("bin/backgrounds/" .. sprite_name .. ".png"),
                 sprite_tag
             ),
-            x, y, rot, scale
+            x, y, rot, scale, depth
         )
 end
 
 
-function RenderManager:create_draw_object_foreground(sprite_id, sprite_name, sprite_tag, x, y, scale, rot)
+function RenderManager:create_draw_object_foreground(sprite_id, sprite_name, sprite_tag, x, y, scale, rot, depth)
     self.draw_objects_foreground[sprite_id] =
         DrawObject(
             sprite_id,
@@ -82,12 +85,13 @@ function RenderManager:create_draw_object_foreground(sprite_id, sprite_name, spr
                 love.graphics.newImage("bin/sprites/" .. sprite_name .. ".png"),
                 sprite_tag
             ),
-            x, y, rot, scale
+            x, y, rot, scale, depth
         )
 end
 
 
 function RenderManager:draw_background()
+    -- Draw background layer
     for _, draw_obj in pairs(self.draw_objects_background) do
         draw_obj.sprite:draw(
             draw_obj.x + draw_obj.dx,
@@ -103,7 +107,19 @@ end
 
 
 function RenderManager:draw_foreground()
-    for _, draw_obj in pairs(self.draw_objects_foreground) do
+    -- Sort sprites by depth
+    local draw_list = {}
+    for _, obj in pairs(self.draw_objects_foreground) do
+        table.insert(draw_list, obj)
+    end
+
+    -- Sort by depth
+    table.sort(draw_list, function(a, b)
+        return a.depth < b.depth
+    end)
+    
+    -- Draw shadows layer
+    for _, draw_obj in ipairs(draw_list) do
         self:draw_shadow(
             draw_obj.sprite,
             draw_obj.x + draw_obj.dx,
@@ -115,7 +131,8 @@ function RenderManager:draw_foreground()
         )
     end
 
-    for _, draw_obj in pairs(self.draw_objects_foreground) do
+    -- Draw foreground layer
+    for _, draw_obj in ipairs(draw_list) do
         draw_obj.sprite:draw(
             draw_obj.x + draw_obj.dx,
             draw_obj.y + draw_obj.dy,

@@ -3,9 +3,10 @@ local Class = require("lib.class")
 local DrawObject = Class{}
 
 
-function DrawObject:init(name, sprite, x, y, scale, rot)
+function DrawObject:init(name, sprite, x, y, scale, rot, depth)
     self.name = name
     self.sprite = sprite
+    self.depth = depth
     
     -- Bring in object's real location parameters
     self.x = x

@@ -6,13 +6,14 @@ local EventManager = Class{}
 local Events = {
     SWITCHSCREEN_GAME = 'switch screen to game',
     SWITCHSCREEN_SHOP = 'switch screen to shop',
+    SHUFFLEDECK = 'reset card deck',
     DEALCARDS = 'deal cards to player'
 }
 
 
 function EventManager:init()
     self.events = Events
-    self.listeners = {} -- table storing callbacks for each event
+    self.listeners = {}
 end
 
 

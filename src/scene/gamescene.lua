@@ -34,6 +34,8 @@ end
 
 function GameScene:enter()
     self:setup_events()
+    self.event_manager:trigger(self.event_manager.events.SHUFFLEDECK)
+    self.event_manager:trigger(self.event_manager.events.DEALCARDS)
 
     self:update_sprites()
     self.render_manager:set_shadow_colour("green")
@@ -51,32 +53,41 @@ end
 
 function GameScene:update_sprites()
     self.render_manager:clear_sprites()
-    self.render_manager:create_draw_object_background("background", "background_green", "game", 96, 54, 0, 1)
-    self.render_manager:create_draw_object_foreground("player", "player", "idle", self.player.x, self.player.y, 0, 1)
+    self.render_manager:create_draw_object_background("background", "background_green", "game", 96, 54, 0, 1, 255)
+    self.render_manager:create_draw_object_foreground("player", "player", "idle", self.player.x, self.player.y, 0, 1, 128)
 
-    self.render_manager:create_draw_object_foreground("hud_player_health", "icons", "heart", 15.5, 35.5, 0, 1)
-    self.render_manager:create_draw_object_foreground("hud_player_money", "icons", "money", 15.5, 45.5, 0, 1)
+    self.render_manager:create_draw_object_foreground("hud_player_health", "icons", "heart", 15.5, 35.5, 0, 1, 128)
+    self.render_manager:create_draw_object_foreground("hud_player_money", "icons", "money", 15.5, 45.5, 0, 1, 128)
 
     if #self.player.hand > 0 then
         for i, card in ipairs(self.player.hand) do
-            self.render_manager:create_draw_object_foreground("player_card_" .. i, "cards_" .. card.suit, card.value, 8.5 + (9 * i), 77.5 + (3 * i), 0, 1)
+            self.render_manager:create_draw_object_foreground("player_card_" .. i, "cards_" .. card.suit, card.value, 8.5 + (9 * i), 77.5 + (3 * i), 0, 1, 128+i)
         end
     end
+
+    -- for i, card in ipairs(self.player_deck.deck) do
+    --     self.render_manager:create_draw_object_foreground("deck_card_" .. i, "cards_" .. self.player_deck.deck[1].suit, self.player_deck.deck[1].value, 8.5 + (2 * i), 12.5, 0, 1, 128+i)
+    -- end
 end
 
 
 function GameScene:setup_events()
     self.event_manager:on(
-        self.event_manager.events.DEALCARDS, self, function()
+        self.event_manager.events.SHUFFLEDECK, self, function()
             self.player_deck:reset()
             self.player_deck:shuffle()
+        end
+    )
+
+    self.event_manager:on(
+        self.event_manager.events.DEALCARDS, self, function()
             self.player_deck:deal_cards()
 
             self:update_sprites()
             self.render_manager.draw_objects_foreground["player_card_1"].dy = 4
             self.render_manager.draw_objects_foreground["player_card_2"].dy = 4
             self.render_manager.draw_objects_foreground["player_card_3"].dy = 4
-
+            
             self.event_manager:remove_owner(self)
         end
     )

@@ -9,17 +9,14 @@ end
 
 
 function InputManager:keypressed(key)
-    if key == "f1" then
+    if key == "1" then
         self.event_manager:trigger(self.event_manager.events.SWITCHSCREEN_GAME)
     end
-    if key == "f2" then
+    if key == "2" then
         self.event_manager:trigger(self.event_manager.events.SWITCHSCREEN_SHOP)
     end
-    if key == "f3" then
+    if key == "3" then
         self.event_manager:trigger(self.event_manager.events.DEALCARDS)
-    end
-    if key == "f5" then
-        self.event_manager:trigger(self.event_manager.events.NODPLAYER)
     end
 end
 

@@ -29,8 +29,8 @@ end
 
 function ShopScene:update_sprites()
     self.render_manager:clear_sprites()
-    self.render_manager:create_draw_object_background("background", "background_green", "game", 96, 54, 0, 1)
-    self.render_manager:create_draw_object_foreground("barrel_base", "barrel", "base", 138, 54, 0, 1)
+    self.render_manager:create_draw_object_background("background", "background_green", "game", 96, 54, 0, 1, 255)
+    self.render_manager:create_draw_object_foreground("barrel_base", "barrel", "base", 138, 54, 0, 1, 128)
 end
 
 
