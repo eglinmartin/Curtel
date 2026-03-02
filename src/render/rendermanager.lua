@@ -21,6 +21,9 @@ local shadowShader = love.graphics.newShader([[
 function RenderManager:init(SCENE_MANAGER)
     self.scene_manager = SCENE_MANAGER
 
+    local font = love.graphics.newFont(24)
+    love.graphics.setFont(font)
+
     self.shadow_colour = {75/255, 90/255, 87/255, 1}
     self.draw_objects_background = {}
     self.draw_objects_foreground = {}
@@ -54,9 +57,6 @@ function RenderManager:draw(rs)
 
     -- Draw current scene to foreground canvas
     self:draw_foreground()
-
-    local font = love.graphics.newFont(24)
-    love.graphics.setFont(font)
 
     rs.pop()
 end
