@@ -21,8 +21,8 @@ local shadowShader = love.graphics.newShader([[
 function RenderManager:init(SCENE_MANAGER)
     self.scene_manager = SCENE_MANAGER
 
-    local font = love.graphics.newFont(24)
-    love.graphics.setFont(font)
+    self.font = love.graphics.newFont("assets/curtel.ttf", 16)
+    love.graphics.setFont(self.font)
 
     self.shadow_colour = {75/255, 90/255, 87/255, 1}
     self.draw_objects_background = {}
@@ -49,6 +49,23 @@ function RenderManager:update(dt)
 end
 
 
+function RenderManager:drawText(text, x, y, stepY)
+    stepY = stepY or 1
+
+    local currentX = x
+    local currentY = y
+
+    for i = 1, #text do
+        local char = text:sub(i, i)
+
+        love.graphics.print(char, currentX, currentY)
+
+        currentX = currentX + self.font:getWidth(char)
+        currentY = currentY + stepY
+    end
+end
+
+
 function RenderManager:draw(rs)
     rs.push()
 
@@ -57,6 +74,32 @@ function RenderManager:draw(rs)
 
     -- Draw current scene to foreground canvas
     self:draw_foreground()
+    love.graphics.setFont(self.font)
+
+    -- love.graphics.setColor(75/255, 90/255, 87/255, 1)
+    -- love.graphics.print("10/10", 98, 56)
+    -- love.graphics.print("10/10", 97, 56)
+    -- love.graphics.print("10/10", 96, 56)
+    -- love.graphics.print("10/10", 98, 55)
+    -- love.graphics.print("10/10", 98, 54)
+
+    -- love.graphics.setColor(51/255, 39/255, 45/255, 1)
+    -- love.graphics.print("10/10", 95, 53)
+    -- love.graphics.print("10/10", 96, 53)
+    -- love.graphics.print("10/10", 97, 53)
+    -- love.graphics.print("10/10", 97, 54)
+    -- love.graphics.print("10/10", 97, 55)
+    -- love.graphics.print("10/10", 96, 55)
+    -- love.graphics.print("10/10", 95, 55)
+    -- love.graphics.print("10/10", 95, 54)
+
+    love.graphics.setColor(184/255, 99/255, 67/255, 1)
+    self:drawText("5/10", 22, 27, 0)
+    love.graphics.setColor(1, 1, 1, 1)
+
+    love.graphics.setColor(170/255, 143/255, 104/255, 1)
+    self:drawText("100", 22, 37, 0)
+    love.graphics.setColor(1, 1, 1, 1)
 
     rs.pop()
 end

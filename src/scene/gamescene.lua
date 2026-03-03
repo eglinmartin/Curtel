@@ -61,13 +61,9 @@ function GameScene:update_sprites()
 
     if #self.player.hand > 0 then
         for i, card in ipairs(self.player.hand) do
-            self.render_manager:create_draw_object_foreground("player_card_" .. i, "cards_" .. card.suit, card.value, 8.5 + (9 * i), 77.5 + (3 * i), 0, 1, 128+i)
+            self.render_manager:create_draw_object_foreground("player_card_" .. i, "cards_" .. card.suit, card.value, 8.5 + (9 * i), 79.5 + (3 * i), 0, 1, 128+i)
         end
     end
-
-    -- for i, card in ipairs(self.player_deck.deck) do
-    --     self.render_manager:create_draw_object_foreground("deck_card_" .. i, "cards_" .. self.player_deck.deck[1].suit, self.player_deck.deck[1].value, 8.5 + (2 * i), 12.5, 0, 1, 128+i)
-    -- end
 end
 
 
