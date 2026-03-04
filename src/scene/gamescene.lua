@@ -48,12 +48,16 @@ function GameScene:enter()
     self.render_manager.draw_objects_foreground["player_card_1"].dy = 4
     self.render_manager.draw_objects_foreground["player_card_2"].dy = 4
     self.render_manager.draw_objects_foreground["player_card_3"].dy = 4
+
+    self.render_manager.text_objects["player_health"].dy = 4
+    self.render_manager.text_objects["player_money"].dy = 4
 end
 
 
 function GameScene:update_sprites()
-    self.render_manager:clear_sprites()
+    self.render_manager:clear_screen()
     self.render_manager:create_draw_object_background("background", "background", "green", 96, 54, 0, 1, 255)
+    
     self.render_manager:create_draw_object_foreground("player", "player", "idle", self.player.x, self.player.y, 0, 1, 128)
 
     self.render_manager:create_draw_object_foreground("hud_player_health", "icons", "heart", 15.5, 35.5, 0, 1, 128)
@@ -64,6 +68,9 @@ function GameScene:update_sprites()
             self.render_manager:create_draw_object_foreground("player_card_" .. i, "cards_" .. card.suit, card.value, 8.5 + (9 * i), 79.5 + (3 * i), 0, 1, 128+i)
         end
     end
+
+    self.render_manager:create_text_object("player_health", "5/10", self.render_manager.colours.RED1, 22, 33, 0, 1, 64, "left")
+    self.render_manager:create_text_object("player_money", "$100", self.render_manager.colours.YELLOW1, 22, 43, 0, 1, 64, "left")
 end
 
 

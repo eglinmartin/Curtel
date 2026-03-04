@@ -2,6 +2,7 @@ local Class = require("lib.class")
 local peachy = require("lib.peachy")
 
 local DrawObject = require("src.render.drawobject")
+local TextObject = require("src.render.textobject")
 local RenderManager = Class{}
 
 
@@ -42,7 +43,7 @@ local Colours = {
     GREY4 = {91/255, 69/255, 95/255, 1},
     GREY5 = {73/255, 52/255, 61/255, 1},
     WHITE = {210/255, 201/255, 165/255, 1},
-    BLACK = {40/255, 31/255, 35/255, 1},
+    BLACK = {51/255, 39/255, 45/255, 1},
 }
 
 
@@ -56,12 +57,14 @@ function RenderManager:init(SCENE_MANAGER)
     self.shadow_colour = {75/255, 90/255, 87/255, 1}
     self.draw_objects_background = {}
     self.draw_objects_foreground = {}
+    self.text_objects = {}
 end
 
 
-function RenderManager:clear_sprites()
+function RenderManager:clear_screen()
     self.draw_objects_background = {}
     self.draw_objects_foreground = {}
+    self.text_objects = {}
 end
 
 
@@ -75,27 +78,10 @@ function RenderManager:update(dt)
     for _, draw_object in pairs(self.draw_objects_foreground) do
        draw_object:update(dt)
     end
-end
-
-
-function RenderManager:drawText(text, x, y, stepY, align)
-    stepY = stepY or 0
-
-    local currentX = x
-    local currentY = y - 6
-
-    if align=='centre' then
-        local totalWidth = self.font:getWidth(text)
-        currentX = x - totalWidth / 2
-    end
-
-    for i = 1, #text do
-        local char = text:sub(i, i)
-
-        love.graphics.print(char, currentX, currentY)
-
-        currentX = currentX + self.font:getWidth(char)
-        currentY = currentY + stepY
+    
+    -- Update text animations
+    for _, text_object in pairs(self.text_objects) do
+       text_object:update(dt)
     end
 end
 
@@ -103,24 +89,9 @@ end
 function RenderManager:draw(rs)
     rs.push()
 
-    -- Draw current scene to background canvas
     self:draw_background()
-
-    -- Draw current scene to foreground canvas
     self:draw_foreground()
-    love.graphics.setFont(self.font)
-
-    love.graphics.setColor(self.colours.RED1)
-    self:drawText("5/10", 22, 33, 0, "left")
-    love.graphics.setColor(1, 1, 1, 1)
-
-    love.graphics.setColor(self.colours.YELLOW1)
-    self:drawText("100", 22, 43, 0, "left")
-    love.graphics.setColor(1, 1, 1, 1)
-
-    love.graphics.setColor(self.colours.GREY1)
-    self:drawText("CURTEL", 96, 8, 0, "centre")
-    love.graphics.setColor(1, 1, 1, 1)
+    self:draw_text()
 
     rs.pop()
 end
@@ -154,6 +125,11 @@ function RenderManager:create_draw_object_foreground(sprite_id, sprite_name, spr
 end
 
 
+function RenderManager:create_text_object(text_id, string, colour, x, y, scale, rot, depth, align)
+    self.text_objects[text_id] = TextObject(text_id, string, colour, x, y, scale, rot, depth, align)
+end
+
+
 function RenderManager:draw_background()
     -- Draw background layer
     for _, draw_obj in pairs(self.draw_objects_background) do
@@ -176,8 +152,6 @@ function RenderManager:draw_foreground()
     for _, obj in pairs(self.draw_objects_foreground) do
         table.insert(draw_list, obj)
     end
-
-    -- Sort by depth
     table.sort(draw_list, function(a, b)
         return a.depth < b.depth
     end)
@@ -206,6 +180,63 @@ function RenderManager:draw_foreground()
             draw_obj.sprite:getWidth() / 2,
             draw_obj.sprite:getHeight() / 2
         )
+    end
+end
+
+
+function RenderManager:draw_text()
+    -- Sort text by depth
+    local draw_list = {}
+    for _, obj in pairs(self.text_objects) do
+        table.insert(draw_list, obj)
+    end
+    table.sort(draw_list, function(a, b)
+        return a.depth < b.depth
+    end)
+
+    for _, text_obj in ipairs(draw_list) do
+        local yoffset = 6
+
+        -- Draw text shadow
+        love.graphics.setColor(self.shadow_colour)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 2, text_obj.y + text_obj.dy - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 2, text_obj.y + text_obj.dy + 1 - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 2, text_obj.y + text_obj.dy + 2 - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 1, text_obj.y + text_obj.dy + 2 - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy + 2 - yoffset, text_obj.align)
+
+        -- Draw text outline
+        love.graphics.setColor(self.colours.BLACK)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 1, text_obj.y + text_obj.dy - 1 - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 1, text_obj.y + text_obj.dy - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 1, text_obj.y + text_obj.dy + 1 - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy + 1 - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx - 1, text_obj.y + text_obj.dy + 1 - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx - 1, text_obj.y + text_obj.dy - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx - 1, text_obj.y + text_obj.dy - 1 - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy - 1 - yoffset, text_obj.align)
+
+        -- Draw text
+        love.graphics.setColor(text_obj.colour)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy - yoffset, text_obj.align)
+    end
+
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
+
+function RenderManager:draw_characters(text, x, y, align)
+    if align=='centre' then
+        local totalWidth = self.font:getWidth(text)
+        x = x - totalWidth / 2
+    end
+
+    for i = 1, #text do
+        local char = text:sub(i, i)
+
+        love.graphics.print(char, x, y)
+
+        x = x + self.font:getWidth(char)
     end
 end
 
