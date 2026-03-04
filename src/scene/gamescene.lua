@@ -51,6 +51,7 @@ function GameScene:enter()
 
     self.render_manager.text_objects["player_health"].dy = 4
     self.render_manager.text_objects["player_money"].dy = 4
+    self.render_manager.text_objects["page_title"].dscale = 0.2
 end
 
 
@@ -71,6 +72,7 @@ function GameScene:update_sprites()
 
     self.render_manager:create_text_object("player_health", "5/10", self.render_manager.colours.RED1, 22, 33, 0, 1, 64, "left")
     self.render_manager:create_text_object("player_money", "$100", self.render_manager.colours.YELLOW1, 22, 43, 0, 1, 64, "left")
+    self.render_manager:create_text_object("page_title", "Game Screen", self.render_manager.colours.GREY1, 96, 8, 0, 1, 64, "centre")
 end
 
 

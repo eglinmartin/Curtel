@@ -45,6 +45,7 @@ end
 
 function TextObject:return_to_scale(dt)
     local decay = 16
+    self.dscale = self.dscale * math.exp(-decay * dt)
 
     if math.abs(self.dscale) < 0.001 then
         return 0

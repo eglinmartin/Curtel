@@ -195,51 +195,51 @@ function RenderManager:draw_text()
     end)
 
     for _, text_obj in ipairs(draw_list) do
-        local yoffset = 6
+        local scale = text_obj.scale + text_obj.dscale + 1
 
         -- Draw text shadow
         love.graphics.setColor(self.shadow_colour)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 2, text_obj.y + text_obj.dy - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 2, text_obj.y + text_obj.dy + 1 - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 2, text_obj.y + text_obj.dy + 2 - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 1, text_obj.y + text_obj.dy + 2 - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy + 2 - yoffset, text_obj.align)
+        local offsets = {{2, 0}, {2, 1}, {2, 2}, {1, 2}, {0, 2}}
+        for i = 1, #offsets do
+            local ox, oy = offsets[i][1], (offsets[i][2] - 6)
+            self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + ox, text_obj.y + text_obj.dy + oy, scale, text_obj.align)
+        end
+        
 
         -- Draw text outline
         love.graphics.setColor(self.colours.BLACK)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 1, text_obj.y + text_obj.dy - 1 - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 1, text_obj.y + text_obj.dy - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + 1, text_obj.y + text_obj.dy + 1 - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy + 1 - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx - 1, text_obj.y + text_obj.dy + 1 - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx - 1, text_obj.y + text_obj.dy - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx - 1, text_obj.y + text_obj.dy - 1 - yoffset, text_obj.align)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy - 1 - yoffset, text_obj.align)
+        local offsets = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}}
+
+        for i = 1, #offsets do
+            local ox, oy = offsets[i][1], (offsets[i][2] - 6)
+            self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + ox, text_obj.y + text_obj.dy + oy, scale, text_obj.align)
+        end
 
         -- Draw text
         love.graphics.setColor(text_obj.colour)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy - yoffset, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy - 6, scale, text_obj.align)
     end
 
     love.graphics.setColor(1, 1, 1, 1)
 end
 
 
-function RenderManager:draw_characters(text, x, y, align)
-    if align=='centre' then
-        local totalWidth = self.font:getWidth(text)
+function RenderManager:draw_characters(text, x, y, scale, align)
+    if align == 'centre' then
+        local totalWidth = 0
+        for i = 1, #text do
+            local char = text:sub(i, i)
+            totalWidth = totalWidth + self.font:getWidth(char) * scale
+        end
         x = x - totalWidth / 2
     end
 
     for i = 1, #text do
         local char = text:sub(i, i)
-
-        love.graphics.print(char, x, y)
-
-        x = x + self.font:getWidth(char)
+        love.graphics.print(char, x, y, 0, scale, scale)
+        x = x + self.font:getWidth(char) * scale
     end
 end
-
 
 function RenderManager:set_shadow_colour(colour)
     self.shadow_colour = colour
