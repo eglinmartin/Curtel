@@ -91,7 +91,6 @@ function RenderManager:draw(rs)
 
     self:draw_background()
     self:draw_foreground()
-    self:draw_text()
 
     rs.pop()
 end
@@ -155,8 +154,17 @@ function RenderManager:draw_foreground()
     table.sort(draw_list, function(a, b)
         return a.depth < b.depth
     end)
+
+    -- Sort text by depth
+    local draw_text_list = {}
+    for _, obj in pairs(self.text_objects) do
+        table.insert(draw_text_list, obj)
+    end
+    table.sort(draw_text_list, function(a, b)
+        return a.depth < b.depth
+    end)
     
-    -- Draw shadows layer
+    -- Draw shadows layer (sprites)
     for _, draw_obj in ipairs(draw_list) do
         self:draw_shadow(
             draw_obj.sprite,
@@ -169,7 +177,21 @@ function RenderManager:draw_foreground()
         )
     end
 
-    -- Draw foreground layer
+    -- Draw shadows layer (text)
+    for _, text_obj in ipairs(draw_text_list) do
+        local text_scale = text_obj.scale + text_obj.dscale + 1
+
+        -- Draw text shadow
+        love.graphics.setColor(self.shadow_colour)
+        local offsets = {{2, 0}, {2, 1}, {2, 2}, {1, 2}, {0, 2}}
+        for i = 1, #offsets do
+            local ox, oy = offsets[i][1], (offsets[i][2] - 6)
+            self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + ox, text_obj.y + text_obj.dy + oy, text_scale, text_obj.align)
+        end
+    end
+    love.graphics.setColor(1, 1, 1, 1)
+
+    -- Draw foreground layer (sprites)
     for _, draw_obj in ipairs(draw_list) do
         draw_obj.sprite:draw(
             draw_obj.x + draw_obj.dx,
@@ -181,45 +203,24 @@ function RenderManager:draw_foreground()
             draw_obj.sprite:getHeight() / 2
         )
     end
-end
 
-
-function RenderManager:draw_text()
-    -- Sort text by depth
-    local draw_list = {}
-    for _, obj in pairs(self.text_objects) do
-        table.insert(draw_list, obj)
-    end
-    table.sort(draw_list, function(a, b)
-        return a.depth < b.depth
-    end)
-
-    for _, text_obj in ipairs(draw_list) do
-        local scale = text_obj.scale + text_obj.dscale + 1
-
-        -- Draw text shadow
-        love.graphics.setColor(self.shadow_colour)
-        local offsets = {{2, 0}, {2, 1}, {2, 2}, {1, 2}, {0, 2}}
-        for i = 1, #offsets do
-            local ox, oy = offsets[i][1], (offsets[i][2] - 6)
-            self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + ox, text_obj.y + text_obj.dy + oy, scale, text_obj.align)
-        end
+    -- Draw foreground layer (text)
+    for _, text_obj in ipairs(draw_text_list) do
+        local text_scale = text_obj.scale + text_obj.dscale + 1
         
-
         -- Draw text outline
         love.graphics.setColor(self.colours.BLACK)
         local offsets = {{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}}
 
         for i = 1, #offsets do
             local ox, oy = offsets[i][1], (offsets[i][2] - 6)
-            self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + ox, text_obj.y + text_obj.dy + oy, scale, text_obj.align)
+            self:draw_characters(text_obj.text, text_obj.x + text_obj.dx + ox, text_obj.y + text_obj.dy + oy, text_scale, text_obj.align)
         end
 
         -- Draw text
         love.graphics.setColor(text_obj.colour)
-        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy - 6, scale, text_obj.align)
+        self:draw_characters(text_obj.text, text_obj.x + text_obj.dx, text_obj.y + text_obj.dy - 6, text_scale, text_obj.align)
     end
-
     love.graphics.setColor(1, 1, 1, 1)
 end
 
@@ -236,7 +237,11 @@ function RenderManager:draw_characters(text, x, y, scale, align)
 
     for i = 1, #text do
         local char = text:sub(i, i)
+
+        -- love.graphics.setScissor(x, y, self.font:getWidth(char), 4)
         love.graphics.print(char, x, y, 0, scale, scale)
+        -- love.graphics.setScissor()
+
         x = x + self.font:getWidth(char) * scale
     end
 end
