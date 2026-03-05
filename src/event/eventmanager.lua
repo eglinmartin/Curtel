@@ -4,6 +4,7 @@ local EventManager = Class{}
 
 
 local Events = {
+    UPDATE = 'update',
     SWITCHSCREEN_GAME = 'switch screen to game',
     SWITCHSCREEN_SHOP = 'switch screen to shop',
     SHUFFLEDECK = 'reset card deck',

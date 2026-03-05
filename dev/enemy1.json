@@ -1,5 +1,5 @@
 { "frames": {
-   "player 0.aseprite": {
+   "enemy1 0.aseprite": {
     "frame": { "x": 0, "y": 0, "w": 32, "h": 32 },
     "rotated": false,
     "trimmed": false,
@@ -7,7 +7,7 @@
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 500
    },
-   "player 1.aseprite": {
+   "enemy1 1.aseprite": {
     "frame": { "x": 32, "y": 0, "w": 32, "h": 32 },
     "rotated": false,
     "trimmed": false,
@@ -15,7 +15,7 @@
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 500
    },
-   "player 2.aseprite": {
+   "enemy1 2.aseprite": {
     "frame": { "x": 64, "y": 0, "w": 32, "h": 32 },
     "rotated": false,
     "trimmed": false,
@@ -23,7 +23,7 @@
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 100
    },
-   "player 3.aseprite": {
+   "enemy1 3.aseprite": {
     "frame": { "x": 96, "y": 0, "w": 32, "h": 32 },
     "rotated": false,
     "trimmed": false,
@@ -35,7 +35,7 @@
  "meta": {
   "app": "https://www.aseprite.org/",
   "version": "1.3.7-x64",
-  "image": "player.png",
+  "image": "enemy1.png",
   "format": "RGBA8888",
   "size": { "w": 128, "h": 32 },
   "scale": "1",

@@ -14,7 +14,7 @@ function Player:init(controller)
     self.x = 66
     self.y = 80
     
-    self.health = 5
+    self.health = 10
     self.max_health = 10
     self.money = 10
     self.animations = {}
