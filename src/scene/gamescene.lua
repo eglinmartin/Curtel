@@ -43,7 +43,7 @@ function GameScene:enter()
     self.render_manager.draw_objects_foreground["player"].dy = 4
     self.render_manager.draw_objects_foreground["hud_player_health"].dy = 4
     self.render_manager.draw_objects_foreground["hud_player_money"].dy = 4
-    self.render_manager.draw_objects_foreground["hud_player_money"].dy = 4
+    self.render_manager.draw_objects_foreground["hud_player_deck"].dy = 4
     
     self.render_manager.draw_objects_foreground["player_card_1"].dy = 4
     self.render_manager.draw_objects_foreground["player_card_2"].dy = 4
@@ -51,6 +51,8 @@ function GameScene:enter()
 
     self.render_manager.text_objects["player_health"].dy = 4
     self.render_manager.text_objects["player_money"].dy = 4
+    self.render_manager.text_objects["player_deck"].dy = 4
+
     self.render_manager.text_objects["page_title"].dscale = 0.2
 end
 
@@ -61,8 +63,9 @@ function GameScene:update_sprites()
     
     self.render_manager:create_draw_object_foreground("player", "player", "idle", self.player.x, self.player.y, 0, 1, 128)
 
-    self.render_manager:create_draw_object_foreground("hud_player_health", "icons", "heart", 15.5, 35.5, 0, 1, 128)
-    self.render_manager:create_draw_object_foreground("hud_player_money", "icons", "money", 15.5, 45.5, 0, 1, 128)
+    self.render_manager:create_draw_object_foreground("hud_player_health", "icons", "heart", 15.5, 36.5, 0, 1, 128)
+    self.render_manager:create_draw_object_foreground("hud_player_money", "icons", "money", 15.5, 47.5, 0, 1, 128)
+    self.render_manager:create_draw_object_foreground("hud_player_deck", "icons", "cards", 15.5, 58.5, 0, 1, 128)
 
     if #self.player.hand > 0 then
         for i, card in ipairs(self.player.hand) do
@@ -70,8 +73,10 @@ function GameScene:update_sprites()
         end
     end
 
-    self.render_manager:create_text_object("player_health", "5/10", self.render_manager.colours.RED1, 22, 33, 0, 1, 64, "left")
-    self.render_manager:create_text_object("player_money", "$100", self.render_manager.colours.YELLOW1, 22, 43, 0, 1, 64, "left")
+    self.render_manager:create_text_object("player_health", "5/10", self.render_manager.colours.RED1, 22, 34, 0, 1, 64, "left")
+    self.render_manager:create_text_object("player_money", "$100", self.render_manager.colours.YELLOW1, 22, 45, 0, 1, 64, "left")
+    self.render_manager:create_text_object("player_deck", tostring(#self.player_deck.deck), self.render_manager.colours.BROWN1, 22, 56, 0, 1, 64, "left")
+
     self.render_manager:create_text_object("page_title", "Game Screen", self.render_manager.colours.GREY1, 96, 8, 0, 1, 64, "centre")
 end
 
@@ -89,9 +94,19 @@ function GameScene:setup_events()
             self.player_deck:deal_cards()
 
             self:update_sprites()
-            self.render_manager.draw_objects_foreground["player_card_1"].dy = 4
-            self.render_manager.draw_objects_foreground["player_card_2"].dy = 4
-            self.render_manager.draw_objects_foreground["player_card_3"].dy = 4
+            self.render_manager.draw_objects_foreground["player_card_1"].dx = -4
+            self.render_manager.draw_objects_foreground["player_card_1"].dy = -24
+
+            
+            self.render_manager.draw_objects_foreground["player_card_2"].dx = -13
+            self.render_manager.draw_objects_foreground["player_card_2"].dy = -26
+
+
+            self.render_manager.draw_objects_foreground["player_card_3"].dx = -22
+            self.render_manager.draw_objects_foreground["player_card_3"].dy = -28
+
+            self.render_manager.draw_objects_foreground["hud_player_deck"].dscale = 1.2
+            self.render_manager.text_objects["player_deck"].dx = 3
             
             self.event_manager:remove_owner(self)
         end

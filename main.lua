@@ -14,7 +14,7 @@ local SceneManager = require("src.scene.scenemanager")
 
 rs.conf({game_width = 192, game_height = 108, pixel_perfect = true})
 rs.setMode(1920, 1080, {fullscreen = true})
--- rs.setMode(1152, 648, {fullscreen = false})
+-- rs.setMode(960, 540, {fullscreen = false})
 
 
 function love.load()

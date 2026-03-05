@@ -100,7 +100,6 @@ function Deck:deal_cards()
             table.insert(self.owner.hand, card)
         end
     end
-    print(#self.deck)
 end
 
 
