@@ -8,7 +8,7 @@ local GameState = Class{}
 
 function GameState:init()
     self.player = Player()
-    self.player_deck = Deck(self.player)
+    self.player.deck = Deck(self.player)
 end
 
 

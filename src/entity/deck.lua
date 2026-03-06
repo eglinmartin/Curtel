@@ -79,24 +79,24 @@ function Deck:init(owner)
     self.owner = owner
 
     self.owner = owner
-    self.deck = {}
+    self.cards = {}
     self:reset()
 end
 
 
 function Deck:reset()
-    self.deck = {}
+    self.cards = {}
     for _, card in pairs(Cards) do
-        table.insert(self.deck, card)
+        table.insert(self.cards, card)
     end
 end
 
 
 function Deck:deal_cards()
     self.owner.hand = {}
-    if #self.deck >= 3 then
+    if #self.cards >= 3 then
         for i = 1, 3 do
-            local card = table.remove(self.deck, 1)
+            local card = table.remove(self.cards, 1)
             table.insert(self.owner.hand, card)
         end
     end
@@ -105,9 +105,9 @@ end
 
 function Deck:shuffle()
     -- Shuffle the deck
-    for i = #self.deck, 2, -1 do
+    for i = #self.cards, 2, -1 do
         local j = math.random(i)
-        self.deck[i], self.deck[j] = self.deck[j], self.deck[i]
+        self.cards[i], self.cards[j] = self.cards[j], self.cards[i]
     end
 
 end

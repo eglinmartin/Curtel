@@ -9,16 +9,45 @@ function GameScene:init(GAME_STATE, RENDER_MANAGER, EVENT_MANAGER)
     self.event_manager = EVENT_MANAGER
 
     self.player = self.game_state.player
-    self.player_deck = self.game_state.player_deck
+
+    -- Set animation timers
+    self.animation_dealing = 0
+end
+
+
+function GameScene:update_animations(dt)
+    self.animation_dealing = self.animation_dealing + 1
 end
 
 
 function GameScene:update(dt)
+    self:update_animations()
+
     if self.player then
         self.player:update(dt)
     end
 
-    self:setup_events()
+    if #self.player.hand > 0 then
+        if self.animation_dealing <= 1 then
+            self.render_manager.draw_objects_foreground["player_card_1"].dx = -0
+            self.render_manager.draw_objects_foreground["player_card_1"].dy = -24
+        end
+        
+        if self.animation_dealing < 6 then
+            self.render_manager.draw_objects_foreground["player_card_2"].dx = -90
+        elseif self.animation_dealing == 6 then
+            self.render_manager.draw_objects_foreground["player_card_2"].dx = -9
+            self.render_manager.draw_objects_foreground["player_card_2"].dy = -26
+        end
+
+        if self.animation_dealing < 11 then
+            self.render_manager.draw_objects_foreground["player_card_3"].dx = -180
+        elseif self.animation_dealing == 11 then
+            self.render_manager.draw_objects_foreground["player_card_3"].dx = -18
+            self.render_manager.draw_objects_foreground["player_card_3"].dy = -28
+        end
+    end
+
     self.event_manager:trigger(self.event_manager.events.UPDATE)
 end
 
@@ -36,6 +65,8 @@ function GameScene:enter()
     self:setup_events()
     
     self.player.hand = {}
+    self.update_frame = 0
+
     self.event_manager:trigger(self.event_manager.events.SHUFFLEDECK)
 
     self:update_sprites()
@@ -81,56 +112,31 @@ function GameScene:update_sprites()
     self.render_manager:create_text_object("player_name", "Player", self.render_manager.colours.YELLOW1, 44, 17, 0, 1, 64, "centre")
     self.render_manager:create_text_object("player_health", tostring(self.player.health) .. "/" .. tostring(self.player.max_health), self.render_manager.colours.RED1, 22, 32, 0, 1, 64, "left")
     self.render_manager:create_text_object("player_money", "$" .. tostring(self.player.money), self.render_manager.colours.YELLOW1, 22, 43, 0, 1, 64, "left")
-    self.render_manager:create_text_object("player_deck", tostring(#self.player_deck.deck), self.render_manager.colours.BROWN1, 22, 54, 0, 1, 64, "left")
+    self.render_manager:create_text_object("player_deck", tostring(#self.player.deck.cards), self.render_manager.colours.BROWN1, 22, 54, 0, 1, 64, "left")
 
 end
 
 
 function GameScene:setup_events()
+    -- Shuffle and reset the deck on shuffle command
     self.event_manager:on(
         self.event_manager.events.SHUFFLEDECK, self, function()
-            self.player_deck:reset()
-            self.player_deck:shuffle()
+            self.player.deck:reset()
+            self.player.deck:shuffle()
         end
     )
 
+    -- Deal cards to the player on deal cards command
     self.event_manager:on(
         self.event_manager.events.DEALCARDS, self, function()
-            if #self.player_deck.deck >= 3 then
-                self.player_deck:deal_cards()
+            if #self.player.deck.cards >= 3 then
+                self.animation_dealing = 0
+                self.player.deck:deal_cards()
                 self:update_sprites()
-
-                local frame = 0
-
-                self.event_manager:on(self.event_manager.events.UPDATE, {}, function()
-                    frame = frame + 1
-
-                    if frame <= 1 then
-                        self.render_manager.draw_objects_foreground["player_card_1"].dx = -0
-                        self.render_manager.draw_objects_foreground["player_card_1"].dy = -24
-                    end
-                    
-                    if frame < 6 then
-                        self.render_manager.draw_objects_foreground["player_card_2"].dx = -90
-                    elseif frame == 6 then
-                        self.render_manager.draw_objects_foreground["player_card_2"].dx = -9
-                        self.render_manager.draw_objects_foreground["player_card_2"].dy = -26
-                    end
-
-                    if frame < 11 then
-                        self.render_manager.draw_objects_foreground["player_card_3"].dx = -180
-                    elseif frame == 11 then
-                        self.render_manager.draw_objects_foreground["player_card_3"].dx = -18
-                        self.render_manager.draw_objects_foreground["player_card_3"].dy = -28
-                    end
-                end)
 
             self.render_manager.draw_objects_foreground["hud_player_deck"].dscale = 1.2
             self.render_manager.text_objects["player_deck"].dx = 3
-            
             end
-
-            self.event_manager:remove_owner(self)
         end
     )
 end
