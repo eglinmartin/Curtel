@@ -58,6 +58,9 @@ function GameScene:enter()
     self.render_manager.text_objects["player_deck"].dy = 4
 
     self.render_manager.text_objects["player_name"].dy = 4
+    
+    self.render_manager.draw_objects_foreground["hud_player_deck"].dscale = 1.2
+    self.render_manager.text_objects["player_deck"].dx = 3
 end
 
 
@@ -72,7 +75,8 @@ function GameScene:update_sprites()
     self.render_manager:create_draw_object_foreground("hud_player_head", "player", "head", 20, 20, 0, 1, 128)
     self.render_manager:create_draw_object_foreground("hud_player_health", "icons", "heart", 15.5, 34.5, 0, 1, 128)
     self.render_manager:create_draw_object_foreground("hud_player_money", "icons", "money", 15.5, 45.5, 0, 1, 128)
-    self.render_manager:create_draw_object_foreground("hud_player_deck", "icons", "cards", 15.5, 56.5, 0, 1, 128)
+    self.render_manager:create_draw_object_foreground("hud_player_deck", "icons", "cards", 15.5, 56.5, 0, 1, 140)
+
 
     if #self.player.hand > 0 then
         for i, card in ipairs(self.player.hand) do
@@ -98,37 +102,39 @@ function GameScene:setup_events()
 
     self.event_manager:on(
         self.event_manager.events.DEALCARDS, self, function()
-            self.player_deck:deal_cards()
-            self:update_sprites()
+            if #self.player_deck.deck >= 3 then
+                self.player_deck:deal_cards()
+                self:update_sprites()
 
-            local frame = 0
+                local frame = 0
 
-            self.event_manager:on(self.event_manager.events.UPDATE, {}, function()
-                frame = frame + 1
-                print(frame)
+                self.event_manager:on(self.event_manager.events.UPDATE, {}, function()
+                    frame = frame + 1
 
-                if frame <= 1 then
-                    self.render_manager.draw_objects_foreground["player_card_1"].dx = -0
-                    self.render_manager.draw_objects_foreground["player_card_1"].dy = -24
-                end
-                
-                if frame < 6 then
-                    self.render_manager.draw_objects_foreground["player_card_2"].dx = -90
-                elseif frame == 6 then
-                    self.render_manager.draw_objects_foreground["player_card_2"].dx = -9
-                    self.render_manager.draw_objects_foreground["player_card_2"].dy = -26
-                end
+                    if frame <= 1 then
+                        self.render_manager.draw_objects_foreground["player_card_1"].dx = -0
+                        self.render_manager.draw_objects_foreground["player_card_1"].dy = -24
+                    end
+                    
+                    if frame < 6 then
+                        self.render_manager.draw_objects_foreground["player_card_2"].dx = -90
+                    elseif frame == 6 then
+                        self.render_manager.draw_objects_foreground["player_card_2"].dx = -9
+                        self.render_manager.draw_objects_foreground["player_card_2"].dy = -26
+                    end
 
-                if frame < 11 then
-                    self.render_manager.draw_objects_foreground["player_card_3"].dx = -180
-                elseif frame == 11 then
-                    self.render_manager.draw_objects_foreground["player_card_3"].dx = -18
-                    self.render_manager.draw_objects_foreground["player_card_3"].dy = -28
-                end
-            end)
+                    if frame < 11 then
+                        self.render_manager.draw_objects_foreground["player_card_3"].dx = -180
+                    elseif frame == 11 then
+                        self.render_manager.draw_objects_foreground["player_card_3"].dx = -18
+                        self.render_manager.draw_objects_foreground["player_card_3"].dy = -28
+                    end
+                end)
 
             self.render_manager.draw_objects_foreground["hud_player_deck"].dscale = 1.2
             self.render_manager.text_objects["player_deck"].dx = 3
+            
+            end
             
             self.event_manager:remove_owner(self)
         end
