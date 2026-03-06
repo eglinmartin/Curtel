@@ -226,13 +226,17 @@ end
 
 
 function RenderManager:draw_characters(text, x, y, scale, align)
-    if align == 'centre' then
+    if align ~= 'left' then
         local totalWidth = 0
         for i = 1, #text do
             local char = text:sub(i, i)
             totalWidth = totalWidth + self.font:getWidth(char) * scale
         end
-        x = x - totalWidth / 2
+        if align == 'centre' then
+            x = x - totalWidth / 2
+        elseif align == 'right' then
+            x = x - totalWidth
+        end
     end
 
     for i = 1, #text do

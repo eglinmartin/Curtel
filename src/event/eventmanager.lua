@@ -8,7 +8,7 @@ local Events = {
     SWITCHSCREEN_GAME = 'switch screen to game',
     SWITCHSCREEN_SHOP = 'switch screen to shop',
     SHUFFLEDECK = 'reset card deck',
-    DEALCARDS = 'deal cards to player'
+    DEALCARDS = 'deal cards to player',
 }
 
 

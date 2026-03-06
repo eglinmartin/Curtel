@@ -11,8 +11,6 @@ States = {
 function Player:init(controller)
     self.controller = controller
     self.state = States.IDLE
-    self.x = 66
-    self.y = 80
     
     self.health = 10
     self.max_health = 10
