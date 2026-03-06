@@ -10,7 +10,6 @@ function GameScene:init(GAME_STATE, RENDER_MANAGER, EVENT_MANAGER)
 
     self.player = self.game_state.player
     self.player_deck = self.game_state.player_deck
-    self.player.hand = {self.player_deck.deck[1], self.player_deck.deck[2], self.player_deck.deck[3]}
 end
 
 
@@ -35,8 +34,9 @@ end
 
 function GameScene:enter()
     self:setup_events()
+    
+    self.player.hand = {}
     self.event_manager:trigger(self.event_manager.events.SHUFFLEDECK)
-    self.event_manager:trigger(self.event_manager.events.DEALCARDS)
 
     self:update_sprites()
     self.render_manager:set_shadow_colour(self.render_manager.colours.GREEN5)
@@ -48,10 +48,6 @@ function GameScene:enter()
     self.render_manager.draw_objects_foreground["hud_player_health"].dy = 4
     self.render_manager.draw_objects_foreground["hud_player_money"].dy = 4
     self.render_manager.draw_objects_foreground["hud_player_deck"].dy = 4
-    
-    self.render_manager.draw_objects_foreground["player_card_1"].dy = 4
-    self.render_manager.draw_objects_foreground["player_card_2"].dy = 4
-    self.render_manager.draw_objects_foreground["player_card_3"].dy = 4
 
     self.render_manager.text_objects["player_health"].dy = 4
     self.render_manager.text_objects["player_money"].dy = 4
@@ -59,8 +55,6 @@ function GameScene:enter()
 
     self.render_manager.text_objects["player_name"].dy = 4
     
-    self.render_manager.draw_objects_foreground["hud_player_deck"].dscale = 1.2
-    self.render_manager.text_objects["player_deck"].dx = 3
 end
 
 
@@ -135,7 +129,7 @@ function GameScene:setup_events()
             self.render_manager.text_objects["player_deck"].dx = 3
             
             end
-            
+
             self.event_manager:remove_owner(self)
         end
     )
