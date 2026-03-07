@@ -77,8 +77,6 @@ Cards = {
 function Deck:init(owner)
     -- Create pack of cards
     self.owner = owner
-
-    self.owner = owner
     self.cards = {}
     self:reset()
 end
