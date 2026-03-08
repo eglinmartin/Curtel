@@ -1,18 +1,18 @@
 { "frames": {
    "background 0.aseprite": {
-    "frame": { "x": 0, "y": 0, "w": 192, "h": 108 },
+    "frame": { "x": 0, "y": 0, "w": 240, "h": 135 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 192, "h": 108 },
-    "sourceSize": { "w": 192, "h": 108 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 240, "h": 108 },
+    "sourceSize": { "w": 240, "h": 135 },
     "duration": 100
    },
    "background 1.aseprite": {
-    "frame": { "x": 192, "y": 0, "w": 192, "h": 108 },
+    "frame": { "x": 240, "y": 0, "w": 240, "h": 135 },
     "rotated": false,
     "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 192, "h": 108 },
-    "sourceSize": { "w": 192, "h": 108 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 192, "h": 135 },
+    "sourceSize": { "w": 240, "h": 135 },
     "duration": 100
    },
    "background 2.aseprite": {
