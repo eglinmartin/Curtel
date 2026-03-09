@@ -90,20 +90,23 @@ function GameScene:animate_dealing(dt)
                 self.render_manager.draw_objects_foreground["hud_player_deck"].dscale = 1.2
                 self.render_manager.text_objects["player_deck"].dx = 3
                 self.render_manager.draw_objects_foreground["player_card_1"].dy = -44
+                self.render_manager.draw_objects_foreground["player_card_1"].dscale = -0.3
             end
             
             if self.animation_dealing < 6 then
                 self.render_manager.draw_objects_foreground["player_card_2"].dx = -90
             elseif self.animation_dealing == 6 then
-                self.render_manager.draw_objects_foreground["player_card_2"].dx = -9
-                self.render_manager.draw_objects_foreground["player_card_2"].dy = -46
+                self.render_manager.draw_objects_foreground["player_card_2"].dx = -12
+                self.render_manager.draw_objects_foreground["player_card_2"].dy = -44
+                self.render_manager.draw_objects_foreground["player_card_2"].dscale = -0.3
             end
 
             if self.animation_dealing < 11 then
                 self.render_manager.draw_objects_foreground["player_card_3"].dx = -180
             elseif self.animation_dealing == 11 then
-                self.render_manager.draw_objects_foreground["player_card_3"].dx = -18
-                self.render_manager.draw_objects_foreground["player_card_3"].dy = -48
+                self.render_manager.draw_objects_foreground["player_card_3"].dx = -24
+                self.render_manager.draw_objects_foreground["player_card_3"].dy = -44
+                self.render_manager.draw_objects_foreground["player_card_3"].dscale = -0.3
             end
         end
     end
@@ -119,20 +122,23 @@ function GameScene:animate_dealing(dt)
                 self.render_manager.text_objects["enemy_deck"].dx = -3
                 self.render_manager.draw_objects_foreground["enemy_card_1"].dx = 0
                 self.render_manager.draw_objects_foreground["enemy_card_1"].dy = -44
+                self.render_manager.draw_objects_foreground["enemy_card_1"].dscale = -0.3
             end
             
             if self.animation_dealing < 6 then
                 self.render_manager.draw_objects_foreground["enemy_card_2"].dx = 180
             elseif self.animation_dealing == 6 then
-                self.render_manager.draw_objects_foreground["enemy_card_2"].dx = 9
-                self.render_manager.draw_objects_foreground["enemy_card_2"].dy = -46
+                self.render_manager.draw_objects_foreground["enemy_card_2"].dx = 12
+                self.render_manager.draw_objects_foreground["enemy_card_2"].dy = -44
+                self.render_manager.draw_objects_foreground["enemy_card_2"].dscale = -0.3
             end
 
             if self.animation_dealing < 11 then
                 self.render_manager.draw_objects_foreground["enemy_card_3"].dx = 180
             elseif self.animation_dealing == 11 then
-                self.render_manager.draw_objects_foreground["enemy_card_3"].dx = 18
-                self.render_manager.draw_objects_foreground["enemy_card_3"].dy = -48
+                self.render_manager.draw_objects_foreground["enemy_card_3"].dx = 24
+                self.render_manager.draw_objects_foreground["enemy_card_3"].dy = -44
+                self.render_manager.draw_objects_foreground["enemy_card_3"].dscale = -0.3
             end
         end
     end
@@ -152,6 +158,7 @@ function GameScene:update_sprites()
         self.render_manager:create_draw_object_foreground("hud_player_head", "player", "head", 24, 23, 0, 1, 128)
         self.render_manager:create_draw_object_foreground("hud_player_health", "icons", "heart", 19.5, 38.5, 0, 1, 128)
         self.render_manager:create_draw_object_foreground("hud_player_money", "icons", "money", 19.5, 49.5, 0, 1, 128)
+        
         self.render_manager:create_draw_object_foreground("hud_player_deck", "icons", "cards", 19.5, 60.5, 0, 1, 140)
 
         -- Draw player's hud (text)
@@ -163,7 +170,7 @@ function GameScene:update_sprites()
         -- Draw player's hand
         if #self.player.hand > 0 then
             for i, card in ipairs(self.player.hand) do
-                self.render_manager:create_draw_object_foreground("player_card_" .. i, "cards_" .. card.suit, card.value, 12.5 + (9 * i), 102.5 + (3 * i), 0, 1, 128+i)
+                self.render_manager:create_draw_object_foreground("player_card_" .. i, "cards_" .. card.suit, card.value, 12.5 + (11 * i), 101.5 + (3 * i), 0, 1, 128+i)
             end
         end
 
@@ -179,7 +186,7 @@ function GameScene:update_sprites()
 
     if self.enemy then
         -- Draw enemy
-        self.render_manager:create_draw_object_foreground("enemy", "enemy1", "idle", 158, 105, 0, 1, 128)
+        self.render_manager:create_draw_object_foreground("enemy", "enemy1", "idle", 158, 103, 0, 1, 128)
         
         -- Draw enemy's hud (icons)
         self.render_manager:create_draw_object_foreground("hud_enemy_head", "enemy1", "head", 216, 23, 0, 1, 128)
@@ -196,7 +203,7 @@ function GameScene:update_sprites()
         -- Draw enemy's hand
         if #self.player.hand > 0 then
             for i, card in ipairs(self.enemy.hand) do
-                self.render_manager:create_draw_object_foreground("enemy_card_" .. i, "cards_" .. card.suit, card.value, 227.5 - (9 * i), 102.5 + (3 * i), 0, 1, 128+i)
+                self.render_manager:create_draw_object_foreground("enemy_card_" .. i, "cards_" .. card.suit, card.value, 227.5 - (11 * i), 101.5 + (3 * i), 0, 1, 128+i)
             end
         end
     end
